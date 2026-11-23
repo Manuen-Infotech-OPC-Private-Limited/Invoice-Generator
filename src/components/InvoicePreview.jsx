@@ -184,12 +184,12 @@ export const InvoicePreview = React.forwardRef(({ data, onLogoUpload }, ref) => 
 
                   {/* Logo Area: Constant RAM STEELS Logo */}
                   {company.logoUrl ? (
-                    <div className="flex-shrink-0 flex items-center justify-center mr-3.5 relative">
+                    <div className="flex-shrink-0 flex items-center justify-center mr-4 relative">
                       <img
                         src={company.logoUrl}
                         alt="Company Logo"
-                        style={{ maxHeight: `${company.logoHeight || 60}px` }}
-                        className="w-auto max-w-[200px] object-contain block"
+                        style={{ height: `${company.logoHeight || 190}px`, maxHeight: `${company.logoHeight || 190}px` }}
+                        className="w-auto max-w-[320px] object-contain block"
                       />
                     </div>
                   ) : (

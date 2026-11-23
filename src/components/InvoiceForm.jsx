@@ -260,7 +260,7 @@ export function InvoiceForm({ data, onChange, onLogoUpload, onResetToSample, onC
                 <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                   <div className="flex items-center gap-3">
                     {data.company.logoUrl && (
-                      <div className="h-10 w-24 bg-white border border-slate-200 rounded p-1 flex items-center justify-center">
+                      <div className="h-12 w-20 bg-white border border-slate-200 rounded p-1 flex items-center justify-center shadow-xs">
                         <img
                           src={data.company.logoUrl}
                           alt="Ram Steels Logo"

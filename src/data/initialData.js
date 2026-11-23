@@ -5,7 +5,7 @@ export const CONSTANT_COMPANY_DETAILS = {
   name: "RAM STEELS",
   logoUrl: ramSteelsLogo,
   useSampleLogo: false,
-  logoHeight: 65,
+  logoHeight: 160, // Extra large, prominent logo display (200px)
   addressLine1: "DNO : 5-97-12, Ram Steels, Ground Floor",
   addressLine2: "1st Lane, Lakshmipuram",
   cityStatePin: "Guntur Andhra Pradesh 522002",
