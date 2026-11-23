@@ -13,12 +13,13 @@ import {
   ChevronDown,
   ChevronUp,
   Image as ImageIcon,
-  Sliders
+  Sliders,
+  Lock
 } from 'lucide-react';
 import { formatCurrency } from '../utils/formatters';
 
 export function InvoiceForm({ data, onChange, onLogoUpload, onResetToSample, onClear }) {
-  const [activeSection, setActiveSection] = useState('company'); // default to company/logo first!
+  const [activeSection, setActiveSection] = useState('meta'); // default to invoice metadata & items
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -236,7 +237,7 @@ export function InvoiceForm({ data, onChange, onLogoUpload, onResetToSample, onC
       </div>
 
       <div className="divide-y divide-slate-100">
-        {/* Section 1: Company Profile & LOGO (Top Priority) */}
+        {/* Section 1: Company Profile (Constant / Fixed for Ram Steels) */}
         <div>
           <button
             type="button"
@@ -245,241 +246,60 @@ export function InvoiceForm({ data, onChange, onLogoUpload, onResetToSample, onC
           >
             <div className="flex items-center gap-2.5">
               <Building2 className="w-4 h-4 text-amber-600" />
-              <span>1. Company Profile & Logo</span>
+              <span>1. Company Profile (Ram Steels)</span>
+              <span className="inline-flex items-center gap-1 text-[11px] font-normal text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full ml-1.5">
+                <Lock className="w-3 h-3 text-emerald-600" /> Constant
+              </span>
             </div>
             {activeSection === 'company' ? <ChevronUp className="w-4 h-4 text-slate-500" /> : <ChevronDown className="w-4 h-4 text-slate-500" />}
           </button>
 
           {activeSection === 'company' && (
-            <div className="p-4 space-y-4">
-              {/* Prominent Logo Uploader Card */}
-              <div className="p-3.5 bg-gradient-to-r from-blue-50/60 to-indigo-50/40 rounded-xl border border-blue-200/80 space-y-3">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <ImageIcon className="w-4 h-4 text-blue-600" />
-                    <span className="font-bold text-xs text-slate-900 uppercase tracking-wide">
-                      Company Logo
-                    </span>
-                  </div>
-                  <span className="text-[11px] text-slate-500 hidden sm:inline">
-                    Upload PNG, JPG, or SVG
-                  </span>
-                </div>
-
-                {data.company.logoUrl ? (
-                  /* Uploaded Logo View */
-                  <div className="flex flex-col sm:flex-row items-center gap-4 bg-white p-3 rounded-lg border border-slate-200">
-                    <div className="h-16 w-36 bg-slate-50 border border-slate-200 rounded flex items-center justify-center p-1.5 overflow-hidden">
-                      <img
-                        src={data.company.logoUrl}
-                        alt="Company Logo Preview"
-                        className="max-h-full max-w-full object-contain"
-                      />
-                    </div>
-                    <div className="flex-1 space-y-2 w-full">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <label className="cursor-pointer px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium flex items-center gap-1.5 shadow-xs transition">
-                          <Upload className="w-3.5 h-3.5" />
-                          <span>Change Logo</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleLogoUpload}
-                            className="hidden"
-                          />
-                        </label>
-                        <button
-                          type="button"
-                          onClick={handleRemoveLogo}
-                          className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-md text-xs font-medium flex items-center gap-1 transition"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                          <span>Remove</span>
-                        </button>
-                      </div>
-
-                      {/* Height Slider */}
-                      <div className="flex items-center gap-3 pt-1">
-                        <Sliders className="w-3.5 h-3.5 text-slate-400" />
-                        <span className="text-[11px] text-slate-600 whitespace-nowrap">
-                          Height: {data.company.logoHeight || 65}px
-                        </span>
-                        <input
-                          type="range"
-                          min="35"
-                          max="110"
-                          value={data.company.logoHeight || 65}
-                          onChange={(e) => handleCompanyChange('logoHeight', Number(e.target.value))}
-                          className="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+            <div className="p-4 space-y-3">
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5 space-y-2 text-xs">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                  <div className="flex items-center gap-3">
+                    {data.company.logoUrl && (
+                      <div className="h-10 w-24 bg-white border border-slate-200 rounded p-1 flex items-center justify-center">
+                        <img
+                          src={data.company.logoUrl}
+                          alt="Ram Steels Logo"
+                          className="max-h-full max-w-full object-contain"
                         />
                       </div>
+                    )}
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Company Name</span>
+                      <h3 className="font-bold text-sm text-slate-900">{data.company.name}</h3>
                     </div>
                   </div>
-                ) : (
-                  /* Drag and Drop / Choose File Area */
-                  <div
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                    onClick={() => fileInputRef.current?.click()}
-                    className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition ${isDragging
-                      ? 'border-blue-500 bg-blue-100/50'
-                      : 'border-blue-300 hover:border-blue-500 bg-white hover:bg-blue-50/30'
-                      }`}
-                  >
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleLogoUpload}
-                      className="hidden"
-                    />
-                    <div className="flex flex-col items-center justify-center space-y-1.5">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
-                        <Upload className="w-5 h-5" />
-                      </div>
-                      <div className="text-xs font-semibold text-slate-800">
-                        Click to browse or drag & drop your company logo here
-                      </div>
-                      <div className="text-[11px] text-slate-500">
-                        Supports transparent PNG, SVG, JPG, WebP
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Sample Logo toggle if no custom logo is active */}
-                <div className="flex justify-between items-center text-[11px] text-slate-600 pt-1">
-                  <span>
-                    Current: <strong>{data.company.logoUrl ? 'Custom Uploaded Logo' : (data.company.useSampleLogo ? 'Ram Steels Sample Logo' : 'No Logo')}</strong>
+                  <span className="text-[11px] text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-md flex items-center gap-1 font-medium shadow-xs">
+                    <Lock className="w-3 h-3 text-emerald-600" /> Fixed / Non-editable
                   </span>
-                  <div className="space-x-2">
-                    {!data.company.useSampleLogo && !data.company.logoUrl && (
-                      <button
-                        type="button"
-                        onClick={handleUseSampleLogo}
-                        className="text-blue-600 hover:underline font-medium"
-                      >
-                        Use Ram Steels Logo
-                      </button>
-                    )}
-                    {data.company.useSampleLogo && (
-                      <button
-                        type="button"
-                        onClick={handleRemoveLogo}
-                        className="text-rose-600 hover:underline font-medium"
-                      >
-                        Hide Sample Logo
-                      </button>
-                    )}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-700 pt-1">
+                  <div>
+                    <span className="text-slate-500 block text-[10px] font-semibold uppercase">Registered Address</span>
+                    <p className="font-medium text-slate-900 mt-0.5">{data.company.addressLine1}</p>
+                    <p className="font-medium text-slate-900">{data.company.addressLine2}</p>
+                    <p className="font-medium text-slate-900">{data.company.cityStatePin}, {data.company.country}</p>
                   </div>
-                </div>
-              </div>
-
-              {/* Company Info Fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
-                    Company Name
-                  </label>
-                  <input
-                    type="text"
-                    value={data.company.name}
-                    onChange={(e) => handleCompanyChange('name', e.target.value)}
-                    placeholder="e.g. Ram Steels"
-                    className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 focus:outline-none font-bold"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
-                    Address Line 1
-                  </label>
-                  <input
-                    type="text"
-                    value={data.company.addressLine1}
-                    onChange={(e) => handleCompanyChange('addressLine1', e.target.value)}
-                    placeholder="DNO : 5-97-12, Ground Floor"
-                    className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
-                    Address Line 2
-                  </label>
-                  <input
-                    type="text"
-                    value={data.company.addressLine2}
-                    onChange={(e) => handleCompanyChange('addressLine2', e.target.value)}
-                    placeholder="1st Lane, Lakshmipuram"
-                    className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
-                    City, State, Pincode
-                  </label>
-                  <input
-                    type="text"
-                    value={data.company.cityStatePin}
-                    onChange={(e) => handleCompanyChange('cityStatePin', e.target.value)}
-                    placeholder="Guntur Andhra Pradesh 522002"
-                    className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
-                    Country
-                  </label>
-                  <input
-                    type="text"
-                    value={data.company.country}
-                    onChange={(e) => handleCompanyChange('country', e.target.value)}
-                    placeholder="India"
-                    className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
-                    Phone Number
-                  </label>
-                  <input
-                    type="text"
-                    value={data.company.phone}
-                    onChange={(e) => handleCompanyChange('phone', e.target.value)}
-                    placeholder="91-9701122555"
-                    className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={data.company.email}
-                    onChange={(e) => handleCompanyChange('email', e.target.value)}
-                    placeholder="operations@example.com"
-                    className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                  />
-                </div>
-
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-medium text-slate-700 mb-1">
-                    GSTIN Number
-                  </label>
-                  <input
-                    type="text"
-                    value={data.company.gstin}
-                    onChange={(e) => handleCompanyChange('gstin', e.target.value)}
-                    placeholder="37PYIPS0358Q1Z6"
-                    className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded focus:ring-1 focus:ring-blue-500 focus:outline-none font-mono"
-                  />
+                  <div className="space-y-1.5">
+                    <div>
+                      <span className="text-slate-500 block text-[10px] font-semibold uppercase">Phone</span>
+                      <span className="font-medium text-slate-900">{data.company.phone}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-[10px] font-semibold uppercase">Email</span>
+                      <span className="font-medium text-slate-900">{data.company.email}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-[10px] font-semibold uppercase">GSTIN</span>
+                      <span className="font-mono font-bold text-slate-900 bg-white px-2 py-0.5 rounded border border-slate-200 inline-block">
+                        {data.company.gstin}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

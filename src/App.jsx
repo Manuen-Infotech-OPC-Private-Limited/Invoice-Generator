@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Header } from './components/Header';
 import { InvoiceForm } from './components/InvoiceForm';
 import { InvoicePreview } from './components/InvoicePreview';
-import { initialInvoiceData } from './data/initialData';
+import { initialInvoiceData, CONSTANT_COMPANY_DETAILS } from './data/initialData';
 import { downloadInvoicePDF } from './utils/pdfGenerator';
 import { CheckCircle2, AlertCircle, Eye, Edit3, Download } from 'lucide-react';
 
@@ -13,7 +13,11 @@ export function App() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        return {
+          ...parsed,
+          company: CONSTANT_COMPANY_DETAILS // Company details are permanently constant as Ram Steels
+        };
       }
     } catch (e) {
       console.warn('Failed to read from localStorage', e);
@@ -55,19 +59,9 @@ export function App() {
   };
 
   const handleClear = () => {
-    if (window.confirm('Clear all form fields?')) {
+    if (window.confirm('Clear all invoice fields? (Company details will remain constant)')) {
       setInvoiceData({
-        company: {
-          name: '',
-          logoUrl: '',
-          addressLine1: '',
-          addressLine2: '',
-          cityStatePin: '',
-          country: 'India',
-          phone: '',
-          email: '',
-          gstin: ''
-        },
+        company: CONSTANT_COMPANY_DETAILS,
         invoice: {
           invoiceNumber: 'INV-000001',
           invoiceDate: new Date().toISOString().split('T')[0],

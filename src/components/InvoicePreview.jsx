@@ -182,31 +182,19 @@ export const InvoicePreview = React.forwardRef(({ data, onLogoUpload }, ref) => 
                     className="hidden"
                   />
 
-                  {/* Logo Area: Automatically settles according to actual image size */}
+                  {/* Logo Area: Constant RAM STEELS Logo */}
                   {company.logoUrl ? (
-                    <div className="flex-shrink-0 flex items-center justify-center mr-3.5 relative group/logo">
+                    <div className="flex-shrink-0 flex items-center justify-center mr-3.5 relative">
                       <img
                         src={company.logoUrl}
                         alt="Company Logo"
                         style={{ maxHeight: `${company.logoHeight || 60}px` }}
-                        className="w-auto max-w-[200px] object-contain cursor-pointer transition hover:opacity-90 block"
-                        onClick={handlePreviewLogoClick}
-                        title="Click to change logo"
+                        className="w-auto max-w-[200px] object-contain block"
                       />
-                      <div
-                        onClick={handlePreviewLogoClick}
-                        className="no-print absolute inset-0 bg-black/40 text-white rounded opacity-0 group-hover/logo:opacity-100 flex items-center justify-center text-[10px] font-medium transition cursor-pointer"
-                      >
-                        Change Logo
-                      </div>
                     </div>
-                  ) : company.useSampleLogo ? (
+                  ) : (
                     /* Stylized RAM STEELS Logo recreation */
-                    <div
-                      onClick={handlePreviewLogoClick}
-                      className="flex-shrink-0 flex flex-col items-center justify-center mr-3.5 cursor-pointer relative group/sample min-w-[130px]"
-                      title="Click to replace with your own logo"
-                    >
+                    <div className="flex-shrink-0 flex flex-col items-center justify-center mr-3.5 min-w-[130px]">
                       <div className="flex items-center space-x-1">
                         <span className="text-2xl font-black tracking-tight text-gray-900">R</span>
                         <div className="relative inline-block">
@@ -229,19 +217,6 @@ export const InvoicePreview = React.forwardRef(({ data, onLogoUpload }, ref) => 
                       <span className="text-[5.5px] tracking-wider text-gray-500 font-semibold uppercase mt-0.5">
                         STRENGTH THAT BUILDS TOMORROW
                       </span>
-                      <div className="no-print absolute inset-0 bg-blue-600/10 border border-dashed border-blue-400 rounded opacity-0 group-hover/sample:opacity-100 flex items-center justify-center text-[9px] text-blue-700 font-semibold">
-                        Click to Upload Logo
-                      </div>
-                    </div>
-                  ) : (
-                    /* No logo uploaded placeholder - only visible on screen */
-                    <div
-                      onClick={handlePreviewLogoClick}
-                      className="no-print flex-shrink-0 mr-3.5 py-2 px-3 border border-dashed border-slate-300 hover:border-blue-500 rounded bg-slate-50 hover:bg-blue-50/50 flex flex-col items-center justify-center cursor-pointer text-center transition"
-                      title="Click to upload your company logo"
-                    >
-                      <span className="text-[9px] font-bold text-blue-600">+ Upload Logo</span>
-                      <span className="text-[7.5px] text-slate-500">PNG / JPG</span>
                     </div>
                   )}
 
@@ -342,117 +317,131 @@ export const InvoicePreview = React.forwardRef(({ data, onLogoUpload }, ref) => 
                 </div>
               </div>
 
-              {/* Table of Line Items */}
+              {/* Table of Line Items (HTML table with border-collapse prevents any header line collision) */}
               <div className="border-b border-gray-400">
-                {/* Table Header */}
-                <div className="bg-gray-50/70 border-b border-gray-400 text-[10px] font-bold text-gray-800 flex items-stretch min-h-[46px] box-border">
-                  <div className="w-7 border-r border-gray-400 py-2.5 flex items-center justify-center">
-                    #
-                  </div>
-                  <div className="flex-1 min-w-[150px] border-r border-gray-400 py-2.5 px-2 flex items-center justify-start">
-                    Item & Description
-                  </div>
-                  <div className="w-16 border-r border-gray-400 py-2.5 flex items-center justify-center">
-                    HSN /SAC
-                  </div>
-                  <div className="w-14 border-r border-gray-400 py-2.5 pr-2 flex items-center justify-end">
-                    Qty
-                  </div>
-                  <div className="w-[88px] border-r border-gray-400 py-2.5 pr-2 flex items-center justify-end">
-                    Rate
-                  </div>
-
-                  {isIGST ? (
-                    <div className="w-[110px] border-r border-gray-400 flex flex-col justify-between">
-                      <div className="w-full text-center py-1 border-b border-gray-400 text-[10px] font-bold flex items-center justify-center">
-                        IGST
-                      </div>
-                      <div className="w-full flex py-1 text-[9px] font-bold flex-1 items-center">
-                        <div className="w-9 border-r border-gray-400 flex items-center justify-center">%</div>
-                        <div className="flex-1 pr-2 flex items-center justify-end">Amt</div>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="w-[104px] border-r border-gray-400 flex flex-col justify-between">
-                        <div className="w-full text-center py-1 border-b border-gray-400 text-[10px] font-bold flex items-center justify-center">
-                          CGST
-                        </div>
-                        <div className="w-full flex py-1 text-[9px] font-bold flex-1 items-center">
-                          <div className="w-8 border-r border-gray-400 flex items-center justify-center">%</div>
-                          <div className="flex-1 pr-2 flex items-center justify-end">Amt</div>
-                        </div>
-                      </div>
-                      <div className="w-[104px] border-r border-gray-400 flex flex-col justify-between">
-                        <div className="w-full text-center py-1 border-b border-gray-400 text-[10px] font-bold flex items-center justify-center">
-                          SGST
-                        </div>
-                        <div className="w-full flex py-1 text-[9px] font-bold flex-1 items-center">
-                          <div className="w-8 border-r border-gray-400 flex items-center justify-center">%</div>
-                          <div className="flex-1 pr-2 flex items-center justify-end">Amt</div>
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  <div className="w-[92px] py-2.5 pr-2 flex items-center justify-end">
-                    Amount
-                  </div>
-                </div>
-
-                {/* Table Rows */}
-                <div className="divide-y divide-gray-300">
-                  {calculatedItems.map((item) => (
-                    <div key={item.id} className="flex items-stretch text-[10px] hover:bg-gray-50/40 min-h-[30px]">
-                      <div className="w-7 border-r border-gray-400 py-1.5 flex items-center justify-center text-gray-800">
-                        {item.slNo}
-                      </div>
-                      <div className="flex-1 min-w-[150px] border-r border-gray-400 py-1.5 px-2 flex items-center font-medium text-gray-900 leading-tight">
-                        {item.description}
-                      </div>
-                      <div className="w-16 border-r border-gray-400 py-1.5 flex items-center justify-center text-gray-700">
-                        {item.hsnSac}
-                      </div>
-                      <div className="w-14 border-r border-gray-400 py-1.5 pr-2 flex flex-col justify-center items-end text-gray-900 leading-tight">
-                        <div>{item.qty.toFixed(3)}</div>
-                        <div className="text-[9px] text-gray-600">{item.unit}</div>
-                      </div>
-                      <div className="w-[88px] border-r border-gray-400 py-1.5 pr-2 flex items-center justify-end text-gray-900 font-mono text-[9.5px]">
-                        {formatCurrency(item.rate, false, 2)}
-                      </div>
+                <table className="w-full border-collapse table-fixed">
+                  <thead>
+                    {/* Header Row 1 */}
+                    <tr className="bg-gray-50/70 border-b border-gray-400 text-gray-800 text-[10px] font-bold">
+                      <th rowSpan={2} className="w-[32px] border-r border-gray-400 py-1.5 px-0.5 text-center align-middle font-bold">
+                        #
+                      </th>
+                      <th rowSpan={2} className="border-r border-gray-400 py-1.5 px-2 text-left align-middle font-bold">
+                        Item & Description
+                      </th>
+                      <th rowSpan={2} className="w-[68px] border-r border-gray-400 py-1.5 px-1 text-center align-middle font-bold">
+                        HSN /SAC
+                      </th>
+                      <th rowSpan={2} className="w-[60px] border-r border-gray-400 py-1.5 pr-2 text-right align-middle font-bold">
+                        Qty
+                      </th>
+                      <th rowSpan={2} className="w-[88px] border-r border-gray-400 py-1.5 pr-2 text-right align-middle font-bold">
+                        Rate
+                      </th>
 
                       {isIGST ? (
-                        <>
-                          <div className="w-9 border-r border-gray-400 py-1.5 flex items-center justify-center text-gray-800">
-                            {item.igstRate}%
-                          </div>
-                          <div className="w-[74px] border-r border-gray-400 py-1.5 pr-2 flex items-center justify-end text-gray-900 font-mono text-[9.5px]">
-                            {formatCurrency(item.igstAmount, false, 2)}
-                          </div>
-                        </>
+                        <th colSpan={2} className="border-r border-b border-gray-400 py-1 text-center font-bold text-[10px]">
+                          IGST
+                        </th>
                       ) : (
                         <>
-                          <div className="w-8 border-r border-gray-400 py-1.5 flex items-center justify-center text-gray-800">
-                            {item.cgstRate}%
-                          </div>
-                          <div className="w-[72px] border-r border-gray-400 py-1.5 pr-2 flex items-center justify-end text-gray-900 font-mono text-[9.5px]">
-                            {formatCurrency(item.cgstAmount, false, 2)}
-                          </div>
-                          <div className="w-8 border-r border-gray-400 py-1.5 flex items-center justify-center text-gray-800">
-                            {item.sgstRate}%
-                          </div>
-                          <div className="w-[72px] border-r border-gray-400 py-1.5 pr-2 flex items-center justify-end text-gray-900 font-mono text-[9.5px]">
-                            {formatCurrency(item.sgstAmount, false, 2)}
-                          </div>
+                          <th colSpan={2} className="border-r border-b border-gray-400 py-1 text-center font-bold text-[10px]">
+                            CGST
+                          </th>
+                          <th colSpan={2} className="border-r border-b border-gray-400 py-1 text-center font-bold text-[10px]">
+                            SGST
+                          </th>
                         </>
                       )}
 
-                      <div className="w-[92px] py-1.5 pr-2 flex items-center justify-end text-gray-950 font-mono font-medium text-[9.5px]">
-                        {formatCurrency(item.taxableAmount, false, 2)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                      <th rowSpan={2} className="w-[96px] py-1.5 pr-2 text-right align-middle font-bold">
+                        Amount
+                      </th>
+                    </tr>
+
+                    {/* Header Row 2 (Subheaders: % and Amt) */}
+                    <tr className="bg-gray-50/70 border-b border-gray-400 text-gray-800 text-[9px] font-bold">
+                      {isIGST ? (
+                        <>
+                          <th className="w-[36px] border-r border-gray-400 py-1 text-center align-middle font-bold">
+                            %
+                          </th>
+                          <th className="w-[74px] border-r border-gray-400 py-1 pr-2 text-right align-middle font-bold">
+                            Amt
+                          </th>
+                        </>
+                      ) : (
+                        <>
+                          <th className="w-[36px] border-r border-gray-400 py-1 text-center align-middle font-bold">
+                            %
+                          </th>
+                          <th className="w-[72px] border-r border-gray-400 py-1 pr-2 text-right align-middle font-bold">
+                            Amt
+                          </th>
+                          <th className="w-[36px] border-r border-gray-400 py-1 text-center align-middle font-bold">
+                            %
+                          </th>
+                          <th className="w-[72px] border-r border-gray-400 py-1 pr-2 text-right align-middle font-bold">
+                            Amt
+                          </th>
+                        </>
+                      )}
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {calculatedItems.map((item) => (
+                      <tr key={item.id} className="border-b border-gray-300 text-[10px] hover:bg-gray-50/40">
+                        <td className="w-[32px] border-r border-gray-400 py-1.5 px-0.5 text-center text-gray-800 align-middle">
+                          {item.slNo}
+                        </td>
+                        <td className="border-r border-gray-400 py-1.5 px-2 text-left font-medium text-gray-900 leading-tight align-middle">
+                          {item.description}
+                        </td>
+                        <td className="w-[68px] border-r border-gray-400 py-1.5 px-1 text-center text-gray-700 align-middle">
+                          {item.hsnSac}
+                        </td>
+                        <td className="w-[60px] border-r border-gray-400 py-1.5 pr-2 text-right text-gray-900 leading-tight align-middle">
+                          <div>{item.qty.toFixed(3)}</div>
+                          <div className="text-[9px] text-gray-600">{item.unit}</div>
+                        </td>
+                        <td className="w-[88px] border-r border-gray-400 py-1.5 pr-2 text-right text-gray-900 font-mono text-[9.5px] align-middle">
+                          {formatCurrency(item.rate, false, 2)}
+                        </td>
+
+                        {isIGST ? (
+                          <>
+                            <td className="w-[36px] border-r border-gray-400 py-1.5 text-center text-gray-800 align-middle">
+                              {item.igstRate}%
+                            </td>
+                            <td className="w-[74px] border-r border-gray-400 py-1.5 pr-2 text-right text-gray-900 font-mono text-[9.5px] align-middle">
+                              {formatCurrency(item.igstAmount, false, 2)}
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="w-[36px] border-r border-gray-400 py-1.5 text-center text-gray-800 align-middle">
+                              {item.cgstRate}%
+                            </td>
+                            <td className="w-[72px] border-r border-gray-400 py-1.5 pr-2 text-right text-gray-900 font-mono text-[9.5px] align-middle">
+                              {formatCurrency(item.cgstAmount, false, 2)}
+                            </td>
+                            <td className="w-[36px] border-r border-gray-400 py-1.5 text-center text-gray-800 align-middle">
+                              {item.sgstRate}%
+                            </td>
+                            <td className="w-[72px] border-r border-gray-400 py-1.5 pr-2 text-right text-gray-900 font-mono text-[9.5px] align-middle">
+                              {formatCurrency(item.sgstAmount, false, 2)}
+                            </td>
+                          </>
+                        )}
+
+                        <td className="w-[96px] py-1.5 pr-2 text-right text-gray-950 font-mono font-medium text-[9.5px] align-middle">
+                          {formatCurrency(item.taxableAmount, false, 2)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
 
               {/* Bottom Split Section: Total in MTs, Words, Vehicle, T&C on left | Totals & Signature on right */}

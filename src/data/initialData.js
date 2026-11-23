@@ -1,18 +1,23 @@
+import ramSteelsLogo from '../assets/ram-steels-logo.png';
+
+// Constant Company Details (Fixed for Ram Steels)
+export const CONSTANT_COMPANY_DETAILS = {
+  name: "RAM STEELS",
+  logoUrl: ramSteelsLogo,
+  useSampleLogo: false,
+  logoHeight: 65,
+  addressLine1: "DNO : 5-97-12, Ram Steels, Ground Floor",
+  addressLine2: "1st Lane, Lakshmipuram",
+  cityStatePin: "Guntur Andhra Pradesh 522002",
+  country: "India",
+  phone: "91-9701122555",
+  email: "operations.ramsteels@gmail.com",
+  gstin: "37PYIPS0358Q1Z6"
+};
+
 export const initialInvoiceData = {
-  // Company Information
-  company: {
-    name: "Ram Steels",
-    logoUrl: "", // User can upload any logo; if empty and useSampleLogo is true, shows Ram Steels logo
-    useSampleLogo: true, // can be toggled or replaced when user uploads their logo
-    logoHeight: 65,
-    addressLine1: "DNO : 5-97-12, Ram Steels, Ground Floor",
-    addressLine2: "1st Lane, Lakshmipuram",
-    cityStatePin: "Guntur Andhra Pradesh 522002",
-    country: "India",
-    phone: "91-9701122555",
-    email: "operations.ramsteels@gmail.com",
-    gstin: "37PYIPS0358Q1Z6"
-  },
+  // Fixed Company Information
+  company: CONSTANT_COMPANY_DETAILS,
 
   // Invoice Details
   invoice: {
